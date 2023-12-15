@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block users_active %}active{% endblock %}
+
+{% block content %}
+<ul class="navbar-nav mb-2 mb-md-0">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="dropdown07XL" data-bs-toggle="dropdown" aria-expanded="false">Search</a>
+    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdown07XL">
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#un">Username</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#fn">First Name</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ln">Last Name</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#ac">Active</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="modal fade" id="un" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/users/search_username">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="username" class="form-label">Search by Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="fn" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/users/search_first_name">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="first_name" class="form-label">Search by First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="ln" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/users/search_last_name">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Search by Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="ac" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/users/search_active">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="is_active" class="form-label">Search by Active</label>
+            <input type="text" class="form-control" id="is_active" name="is_active" placeholder="Active">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="text-align:center" scope="col">#</th>
+      <th style="text-align:center" scope="col">Username</th>
+      <th style="text-align:center" scope="col">First Name</th>
+      <th style="text-align:center" scope="col">Last Name</th>
+      <th style="text-align:center" scope="col">Phone Number</th>
+      <th style="text-align:center" scope="col">Active</th>
+      <th style="text-align:center" scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr style="vertical-align: middle;">
+      <th style="text-align:center" scope="row">{{ loop.index1 }}</th>
+      <td style="text-align:center">{{ user.username }}</td>
+      <td style="text-align:center">{{ user.first_name }}</td>
+      <td style="text-align:center">{{ user.last_name }}</td>
+      <td style="text-align:center">{{ user.phone_number }}</td>
+      <td style="text-align:center">{{ user.is_active }}</td>
+      {% if(user.is_superuser) %}
+      <td style="text-align:center"></td>
+      {% else %}
+      <td><button style="text-align:center" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#alter{{ user.username }}">Alter</button></td>
+      {% endif %}
+      <div class="modal fade" id="alter{{ user.username }}" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="post" action="/users/alter">
+              <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Search</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <input type="hidden" class="form-control" id="is_active" name="id" value="{{ user.id }}">
+                <input type="hidden" class="form-control" id="is_active" name="is_active" value="{{ user.is_active }}">
+                {% if user.is_active %}
+                <p>Are you sure you want to lock this accout?</p>
+                {% else %}
+                <p>Are you sure you want to unlock this accout?</p>
+                {% endif %}
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if exists("pagination") %}
+<ul class="pagination">
+  {% if existsIn(pagination, "previous") %}
+  <li class="page-item">
+    <a class="page-link" href="/users/{{ pagination.previous }}" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% endif %}
+  {% if existsIn(pagination, "left_ellipsis") %}
+  <li class="page-item"><a class="page-link" href="/users/1">1</a></li>
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  {% endif %}
+  {% for page in pagination.pages_left %}
+  <li class="page-item"><a class="page-link" href="/users/{{ page }}">{{ page }}</a></li>
+  {% endfor %}
+  <li class="page-item active" aria-current="page"><a class="page-link" href="/users/{{ pagination.current }}">{{ pagination.current }}</a></li>
+  {% for page in pagination.pages_right %}
+  <li class="page-item"><a class="page-link" href="/users/{{ page }}">{{ page }}</a></li>
+  {% endfor %}
+  {% if existsIn(pagination, "right_ellipsis") %}
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  <li class="page-item"><a class="page-link" href="/users/{{ pagination.total }}">{{ pagination.total }}</a></li>
+  {% endif %}
+  {% if existsIn(pagination, "next") %}
+  <li class="page-item">
+    <a class="page-link" href="/users/{{ pagination.next }}" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
+{% endblock %}

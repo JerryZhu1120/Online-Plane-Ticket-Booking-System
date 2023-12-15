@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}MyOrders{% endblock %}
+
+{% block myorders_active %}active{% endblock %}
+
+{% block content %}
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#search">
+  Search
+</button>
+<br></br>
+<!-- Modal -->
+<div class="modal fade" id="search" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/myorders/search">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Search</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="departure" class="form-label">Departure</label>
+            <input type="text" class="form-control" id="departure" name="departure" placeholder="Departure">
+          </div>
+          <div class="mb-3">
+            <label for="arrival" class="form-label">Destination</label>
+            <input type="text" class="form-control" id="destination" name="destination" placeholder="Destination">
+          </div>
+          <div class="mb-3">
+            <label for="airline" class="form-label">Airline</label>
+            <input type="text" class="form-control" id="airline" name="airline" placeholder="Airline">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th style="text-align:center" scope="col">Flight Number</th>
+      <th style="text-align:center" scope="col">Departure</th>
+      <th style="text-align:center" scope="col">Destination</th>
+      <th style="text-align:center" scope="col">Departure Time</th>
+      <th style="text-align:center" scope="col">Departure Airport</th>
+      <th style="text-align:center" scope="col">Arrival Time</th>
+      <th style="text-align:center" scope="col">Arrival Airport</th>
+      <th style="text-align:center" scope="col">Airline</th>
+      <th style="text-align:center" scope="col">Price</th>
+      <th style="text-align:center" scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr style="vertical-align: middle;">
+      <th scope="row">{{ loop.index1 }}</th>
+      <td style="text-align:center">{{ order.flight_number }}</td>
+      <td style="text-align:center">{{ order.departure }}</td>
+      <td style="text-align:center">{{ order.destination }}</td>
+      <td style="text-align:center">{{ order.dept_time }}</td>
+      <td style="text-align:center">{{ order.dept_ap }}</td>
+      <td style="text-align:center">{{ order.arrv_time }}</td>
+      <td style="text-align:center">{{ order.arrv_ap }}</td>
+      <td style="text-align:center">{{ order.airline }}</td>
+      <td style="text-align:center">{{ order.price }}</td>
+      <td style="text-align:center"><button type="button" id="cancel_button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cancel{{ order.flight_number }}">Cancel</button></td>
+      <div class="modal fade" id="cancel{{ order.flight_number }}" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="post" action="/myorders/cancel">
+              <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to cancel this order?</p>
+                <input type="hidden" name="flight_number" value="{{ order.flight_number }}">
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% if exists("pagination") %}
+<ul class="pagination">
+  {% if existsIn(pagination, "previous") %}
+  <li class="page-item">
+    <a class="page-link" href="/myorders/search/{{ pagination.previous }}?departure={{departure}}&destination={{destination}}&airline={{airline}}" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% endif %}
+  {% if existsIn(pagination, "left_ellipsis") %}
+  <li class="page-item"><a class="page-link" href="/myorders/search/1?departure={{departure}}&destination={{destination}}&airline={{airline}}">1</a></li>
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  {% endif %}
+  {% for page in pagination.pages_left %}
+  <li class="page-item"><a class="page-link" href="/myorders/search/{{ page }}?departure={{departure}}&destination={{destination}}&airline={{airline}}">{{ page }}</a></li>
+  {% endfor %}
+  <li class="page-item active" aria-current="page"><a class="page-link" href="/myorders/search/{{ pagination.current }}?departure={{departure}}&destination={{destination}}&airline={{airline}}">{{ pagination.current }}</a></li>
+  {% for page in pagination.pages_right %}
+  <li class="page-item"><a class="page-link" href="/myorders/search/{{ page }}?departure={{departure}}&destination={{destination}}&airline={{airline}}">{{ page }}</a></li>
+  {% endfor %}
+  {% if existsIn(pagination, "right_ellipsis") %}
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  <li class="page-item"><a class="page-link" href="/myorders/search/{{ pagination.total }}?departure={{departure}}&destination={{destination}}&airline={{airline}}">{{ pagination.total }}</a></li>
+  {% endif %}
+  {% if existsIn(pagination, "next") %}
+  <li class="page-item">
+    <a class="page-link" href="/myorders/search/{{ pagination.next }}?departure={{departure}}&destination={{destination}}&airline={{airline}}" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
+
+{% endblock %}

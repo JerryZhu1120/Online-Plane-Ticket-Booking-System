@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block title %}Orders{% endblock %}
+
+{% block orders_active %}active{% endblock %}
+
+{% block content %}
+
+<ul class="navbar-nav mb-2 mb-md-0">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="dropdown07XL" data-bs-toggle="dropdown" aria-expanded="false">Search</a>
+    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdown07XL">
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#fn">Flight Number</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#dp">Departure</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#dt">Destination</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#dpt">Departure Time</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#art">Arrival Time</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#al">Airline</a></li>
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#un">Username</a></li>
+    </ul>
+  </li>
+</ul>
+<div class="modal fade" id="dpt" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/orders/search_dept_time">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="dept_time" class="form-label">Search by Departure Time</label>
+            <input type="text" class="form-control" id="boa" name="boa" placeholder="Input 'before' or 'after'"><br>
+            <input type="text" class="form-control" id="dept_time" name="dept_time" placeholder="Departure Time">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="art" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/orders/search_arrv_time">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="dept_time" class="form-label">Search by Arrival Time</label>
+            <input type="text" class="form-control" id="boa" name="boa" placeholder="Input 'before' or 'after'"><br>
+            <input type="text" class="form-control" id="arrv_time" name="arrv_time" placeholder="Arrival Time">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="fn" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/orders/search_flight_number">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="flight_number" class="form-label">Search by Flight Number</label>
+            <input type="text" class="form-control" id="flight_number" name="flight_number" placeholder="Flight Number">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="dp" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/orders/search_departure">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="departure" class="form-label">Search by Departure</label>
+            <input type="text" class="form-control" id="departure" name="departure" placeholder="Departure">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="dt" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/orders/search_destination">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="destination" class="form-label">Search by Destination</label>
+            <input type="text" class="form-control" id="destination" name="destination" placeholder="Destination">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="al" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/orders/search_airline">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="airline" class="form-label">Search by Airline</label>
+            <input type="text" class="form-control" id="airline" name="airline" placeholder="Airline">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="un" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/orders/search_username">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="username" class="form-label">Search by Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="text-align:center" scope="col">#</th>
+      <th style="text-align:center" scope="col">Flight Number</th>
+      <th style="text-align:center" scope="col">Departure</th>
+      <th style="text-align:center" scope="col">Destination</th>
+      <th style="text-align:center" scope="col">Departure Time</th>
+      <th style="text-align:center" scope="col">Arrival Time</th>
+      <th style="text-align:center" scope="col">Airline</th>
+      <th style="text-align:center" scope="col">Price</th>
+      <th style="text-align:center" scope="col">Username</th>
+      <th style="text-align:center" scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr style="vertical-align: middle;">
+      <th style="text-align:center" scope="row">{{ loop.index1 }}</th>
+      <td style="text-align:center">{{ order.flight_number }}</td>
+      <td style="text-align:center">{{ order.departure }}</td>
+      <td style="text-align:center">{{ order.destination }}</td>
+      <td style="text-align:center">{{ order.dept_time }}</td>
+      <td style="text-align:center">{{ order.arrv_time }}</td>
+      <td style="text-align:center">{{ order.airline }}</td>
+      <td style="text-align:center">{{ order.price }}</td>
+      <td style="text-align:center">{{ order.username }}</td>
+      <td style="text-align:center"><button type="button" id="cancel_button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cancel{{ order.flight_number }}">Delete</button></td>
+      <div class="modal fade" id="cancel{{ order.flight_number }}" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="post" action="/orders/delete">
+              <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete this order?</p>
+                <input type="hidden" name="flight_number" value="{{ order.flight_number }}">
+                <input type="hidden" name="username" value="{{ order.username }}">
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% if exists("pagination") %}
+<ul class="pagination">
+  {% if existsIn(pagination, "previous") %}
+  <li class="page-item">
+    <a class="page-link" href="/orders/{{ pagination.previous }}" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% endif %}
+  {% if existsIn(pagination, "left_ellipsis") %}
+  <li class="page-item"><a class="page-link" href="/orders/1">1</a></li>
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  {% endif %}
+  {% for page in pagination.pages_left %}
+  <li class="page-item"><a class="page-link" href="/orders/{{ page }}">{{ page }}</a></li>
+  {% endfor %}
+  <li class="page-item active" aria-current="page"><a class="page-link" href="/orders/{{ pagination.current }}">{{ pagination.current }}</a></li>
+  {% for page in pagination.pages_right %}
+  <li class="page-item"><a class="page-link" href="/orders/{{ page }}">{{ page }}</a></li>
+  {% endfor %}
+  {% if existsIn(pagination, "right_ellipsis") %}
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  <li class="page-item"><a class="page-link" href="/orders/{{ pagination.total }}">{{ pagination.total }}</a></li>
+  {% endif %}
+  {% if existsIn(pagination, "next") %}
+  <li class="page-item">
+    <a class="page-link" href="/orders/{{ pagination.next }}" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
+
+{% endblock %}

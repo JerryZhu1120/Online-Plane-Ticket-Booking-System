@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Flights{% endblock %}
+
+{% block flights_active %}active{% endblock %}
+
+{% block content %}
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#search">
+  Search
+</button>
+<br></br>
+<!-- Modal -->
+<div class="modal fade" id="search" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/flights/search">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Search</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="departure" class="form-label">Departure</label>
+            <input type="text" class="form-control" id="departure" name="departure" placeholder="Departure">
+          </div>
+          <div class="mb-3">
+            <label for="arrival" class="form-label">Destination</label>
+            <input type="text" class="form-control" id="destination" name="destination" placeholder="Destination">
+          </div>
+          <div class="mb-3">
+            <label for="airline" class="form-label">Airline</label>
+            <input type="text" class="form-control" id="airline" name="airline" placeholder="Airline">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th style="text-align:center" scope="col">#</th>
+      <th style="text-align:center" scope="col">Flight Number</th>
+      <th style="text-align:center" scope="col">Departure</th>
+      <th style="text-align:center" scope="col">Destination</th>
+      <th style="text-align:center" scope="col">Departure Time</th>
+      <th style="text-align:center" scope="col">Departure Airport</th>
+      <th style="text-align:center" scope="col">Arrival Time</th>
+      <th style="text-align:center" scope="col">Arrival Airport</th>
+      <th style="text-align:center" scope="col">Airline</th>
+      <th style="text-align:center" scope="col">Price</th>
+      <th style="text-align:center" scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for flight in flights %}
+    <tr style="vertical-align: middle;">
+      <th style="text-align:center" scope="row">{{ loop.index1 }}</th>
+      <td style="text-align:center">{{ flight.flight_number }}</td>
+      <td style="text-align:center">{{ flight.departure }}</td>
+      <td style="text-align:center">{{ flight.destination }}</td>
+      <td style="text-align:center">{{ flight.dept_time }}</td>
+      <td style="text-align:center">{{ flight.dept_ap }}</td>
+      <td style="text-align:center">{{ flight.arrv_time }}</td>
+      <td style="text-align:center">{{ flight.arrv_ap }}</td>
+      <td style="text-align:center">{{ flight.airline }}</td>
+      <td style="text-align:center">{{ flight.price }}</td>
+      {% if exists("user") %}
+      <td style="text-align:center"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#purchase{{ flight.flight_number }}">Purchase</button></td>
+      <div class="modal fade" id="purchase{{ flight.flight_number }}" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="post" action="/flights/purchase">
+              <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Please confirm your order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="departure" class="form-label">Flight Number</label>
+                  <input type="hidden" class="form-control" id="available_seat" name="available_seat" value="{{ flight.available_seat }}"/>
+                  <input type="text" class="form-control" id="flight_number" name="flight_number" value="{{ flight.flight_number }}" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="departure" class="form-label">Departure</label>
+                  <input type="text" class="form-control" id="departure" name="departure" value="{{ flight.departure }}" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="arrival" class="form-label">Destination</label>
+                  <input type="text" class="form-control" id="destination" name="destination" value="{{ flight.destination }}" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="departure" class="form-label">Depature Time</label>
+                  <input type="text" class="form-control" id="departure_time" name="departure_time" value="{{ flight.dept_time }}"readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="departure" class="form-label">Depature Airport</label>
+                  <input type="text" class="form-control" id="departure_airport" name="departure_airport" value="{{ flight.dept_ap }}" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="departure" class="form-label">Arrival Time</label>
+                  <input type="text" class="form-control" id="arrival_time" name="arrival_time" value="{{ flight.arrv_time }}" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="departure" class="form-label">Arrival Airport</label>
+                  <input type="text" class="form-control" id="arrival_airport" name="arrival_airport" value="{{ flight.arrv_ap }}" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="airline" class="form-label">Airline</label>
+                  <input type="text" class="form-control" id="airline" name="airline" value="{{ flight.airline }}" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="departure" class="form-label">Price</label>
+                  <input type="text" class="form-control" id="price" name="price" value="{{ flight.price }}" readonly/>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <td style="text-align:center"><button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#login">Purchase</button></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="modal fade" id="login" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You need to login to do this.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if exists("pagination") %}
+<ul class="pagination">
+  {% if existsIn(pagination, "previous") %}
+  <li class="page-item">
+    <a class="page-link" href="/flights/{{ pagination.previous }}" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  {% endif %}
+  {% if existsIn(pagination, "left_ellipsis") %}
+  <li class="page-item"><a class="page-link" href="/flights/1">1</a></li>
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  {% endif %}
+  {% for page in pagination.pages_left %}
+  <li class="page-item"><a class="page-link" href="/flights/{{ page }}">{{ page }}</a></li>
+  {% endfor %}
+  <li class="page-item active" aria-current="page"><a class="page-link" href="/flights/{{ pagination.current }}">{{ pagination.current }}</a></li>
+  {% for page in pagination.pages_right %}
+  <li class="page-item"><a class="page-link" href="/flights/{{ page }}">{{ page }}</a></li>
+  {% endfor %}
+  {% if existsIn(pagination, "right_ellipsis") %}
+  <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+  <li class="page-item"><a class="page-link" href="/flights/{{ pagination.total }}">{{ pagination.total }}</a></li>
+  {% endif %}
+  {% if existsIn(pagination, "next") %}
+  <li class="page-item">
+    <a class="page-link" href="/flights/{{ pagination.next }}" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="page-item disabled">
+    <a class="page-link" href="#" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+{% endif %}
+
+{% endblock %}
